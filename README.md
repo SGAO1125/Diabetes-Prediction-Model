@@ -1,2 +1,4 @@
 # Diabetes-Prediction-Model
-A Diabetes Prediction Model created for CSCI 370 which includes a monthly food schedule along with the prediction
+A Diabetes Prediction Model created for CSCI 370 which includes a monthly food schedule along with the prediction.
+Jianhao Jin, Steven Gao, Leo Park
+
