@@ -24,6 +24,6 @@ public class Customer{
         System.out.println("Hello World!!");
         String inputforSteven [] = {"han", "due", "Trhee"};
         Customer Steven = new Customer("21232324","Steven", inputforSteven);
-        System.out.println("The id of the user " + Steven.Name + " is: " +  Steven.UserID);
+        System.out.println("The id of the user " + Steven.Name + " is:" +  Steven.UserID);
     }
 }
