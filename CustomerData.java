@@ -1,13 +1,14 @@
 public class CustomerData {
 
-    private float BMI;
-    private float Hb1AC;
-    private float Blood_Glucose_Level;
-    private boolean Heart_Disease;
-    private int age;
-    private boolean Sex; // true = Male, false = Female
-    private boolean Hypertension;
-    private boolean isdiabetic;
+    private static Float BMI;
+    private static Float Hb1AC;
+    private static Float Blood_Glucose_Level;
+    private static boolean Heart_Disease;
+    private static int Age;
+    private static boolean Sex; // true = Male, false = Female
+    private static boolean Hypertension;
+    private static boolean isdiabetic;
+    
 
     public CustomerData(String[] data) {
         if (data.length == 8) {
@@ -17,13 +18,39 @@ public class CustomerData {
         }
     }
 
+    public float getBMI(){
+        return BMI;
+    }
+    public float getHb1AC(){
+        return Hb1AC;
+    }
+    public float getBlood_Glucose_Level(){
+        return Blood_Glucose_Level;
+    }
+    public Boolean getHeart_Disease(){
+        return Heart_Disease;
+    }
+    public int getAge(){
+        return Age;
+    }
+    public Boolean getSex(){
+        return Sex;
+    }
+    public Boolean getHyperTension(){
+        return Hypertension;
+    }
+    public Boolean getisDiabetic(){
+        return isdiabetic;
+    }
+    
+
     private void parseData(String[] data) {
         try {
             BMI = Float.parseFloat(data[0]);
             Hb1AC = Float.parseFloat(data[1]);
             Blood_Glucose_Level = Float.parseFloat(data[2]);
             Heart_Disease = Boolean.parseBoolean(data[3]);
-            age = Integer.parseInt(data[4]);
+            Age = Integer.parseInt(data[4]);
             Sex = Boolean.parseBoolean(data[5]);
             Hypertension = Boolean.parseBoolean(data[6]);
             isdiabetic = Boolean.parseBoolean(data[7]);
@@ -46,7 +73,7 @@ public class CustomerData {
         Hb1AC = 0.0f;
         Blood_Glucose_Level = 0.0f;
         Heart_Disease = false;
-        age = 0;
+        Age = 0;
         Sex = false;
         Hypertension = false;
         isdiabetic = false;
@@ -58,7 +85,7 @@ public class CustomerData {
         Hb1AC = 5.5f;
         Blood_Glucose_Level = 100.0f;
         Heart_Disease = false;
-        age = 30;
+        Age = 30;
         Sex = false;
         Hypertension = false;
         isdiabetic = false;
@@ -71,7 +98,7 @@ public class CustomerData {
         System.out.println("Hb1AC: " + Hb1AC);
         System.out.println("Blood Glucose Level: " + Blood_Glucose_Level);
         System.out.println("Heart Disease: " + Heart_Disease);
-        System.out.println("Age: " + age);
+        System.out.println("Age: " + Age);
         System.out.println("Sex: " + (Sex ? "Male" : "Female"));
         System.out.println("Hypertension: " + Hypertension);
         System.out.println("Is Diabetic: " + isdiabetic);
@@ -89,7 +116,7 @@ public class CustomerData {
             String.valueOf(Hb1AC),
             String.valueOf(Blood_Glucose_Level),
             String.valueOf(Heart_Disease),
-            String.valueOf(age),
+            String.valueOf(Age),
             String.valueOf(Sex),
             String.valueOf(Hypertension),
             String.valueOf(isdiabetic)
