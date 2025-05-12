@@ -1,58 +1,61 @@
 import java.util.*;
 
-public class RandomForestAlgorithm {
-    private final DecisionTree[] forest;
-    private final Random random;
-    private final int numTrees;
-
+public class RandomForestAlgorithm{
+    private DecisionTree[] trees;
+    private int numTrees;
+    private Random random;
+    
+    // Feature index number in the string array dataset
+    private static final int SEX = 0; //0 or 1
+    private static final int AGE = 1; //0 to 99
+    private static final int BMI = 2; // 0 to 50 float
+    private static final int GLUCOSE = 3; // 0 to 300 int
+    private static final int HBA1C = 4; // 3.5 to 9 float
+    private static final int HEART_DISEASE = 5; // 0 or 1
+    private static final int HYPERTENSION = 6; // 0 or 1
+    private static final int DIABETES = 7; // Target variable, 0 or 1
+    
     public RandomForestAlgorithm(int numTrees) {
         this.numTrees = numTrees;
-        this.forest = new DecisionTree[numTrees];
+        this.trees = new DecisionTree[numTrees];
         this.random = new Random();
     }
-
-    public void buildRandomForest(List<String> dataset) {
-        int numRows = dataset.size();
-        int numFeatures = dataset.get(0).split(",").length - 1; // target is at index 0
-
+    
+    public void train(List<String> dataset) {
+        int numInstances = dataset.size();
+        int numFeatures = dataset.get(0).split(",").length - 1;
+        
         for (int i = 0; i < numTrees; i++) {
-            // Create bootstrap sample
-            List<String> bootstrapSample = new ArrayList<>();
-            for (int j = 0; j < numRows; j++) {
-                int idx = random.nextInt(numRows);
-                bootstrapSample.add(dataset.get(idx));
-            }
-
-            // Select random feature subset (excluding target)
-            int m = (int) Math.sqrt(numFeatures);
-            Set<Integer> featureSubset = new HashSet<>();
-            while (featureSubset.size() < m) {
-                int feature = random.nextInt(numFeatures) + 1; // +1 to skip target
-                featureSubset.add(feature);
-            }
-
-            // Build tree using bootstrap sample and feature subset
-            forest[i] = new DecisionTree(bootstrapSample, featureSubset);
+            // 1. Create bootstrap sample
+            List<String> bootstrapSample = createBootstrapSample(dataset, numInstances);
+            
+            // 2. Select random feature subset (always include HbA1c)
+            Set<Integer> featureSubset = selectFeatureSubset(numFeatures);
+            
+            // 3. Build decision tree
+            trees[i] = new DecisionTree(bootstrapSample, featureSubset);
         }
     }
-
-    public String predict(String dataLine) {
-        String[] sample = dataLine.split(",");
-        Map<String, Integer> votes = new HashMap<>();
-
-        for (DecisionTree tree : forest) {
-            String prediction = tree.predict(sample);
-            votes.put(prediction, votes.getOrDefault(prediction, 0) + 1);
+    
+    private List<String> createBootstrapSample(List<String> dataset, int size) { // create a bootstrap sample for building a tree
+        List<String> sample = new ArrayList<>();
+        for (int i = 0; i < size; i++) {
+            sample.add(dataset.get(random.nextInt(size)));
         }
-
-        return votes.entrySet()
-                    .stream()
-                    .max(Map.Entry.comparingByValue())
-                    .map(Map.Entry::getKey)
-                    .orElse(null);
+        return sample;
     }
-
-    public int getNumTrees() {
-        return numTrees;
+    
+    private Set<Integer> selectFeatureSubset(int totalFeatures) { //choose a random subset of features for building a tree
+        Set<Integer> subset = new HashSet<>();
+        subset.add(HBA1C); // Always include HbA1c
+        
+        int subsetSize = (int) Math.sqrt(totalFeatures);
+        while (subset.size() < subsetSize) {
+            int feature = random.nextInt(totalFeatures);
+            if (feature != DIABETES) { // Don't include target
+                subset.add(feature);
+            }
+        }
+        return subset;
     }
 }
