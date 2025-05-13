@@ -21,13 +21,13 @@ public class RandomForestAlgorithm{
         this.random = new Random();
     }
     
-    public void train(List<String> dataset) {
+    public void train(List<List<Float>> dataset) {
         int numInstances = dataset.size();
-        int numFeatures = dataset.get(0).split(",").length - 1;
+        int numFeatures = dataset.get(0).size()-1; // Exclude target variable
         
         for (int i = 0; i < numTrees; i++) {
             // 1. Create bootstrap sample
-            List<String> bootstrapSample = createBootstrapSample(dataset, numInstances);
+            List<List<Float>> bootstrapSample = createBootstrapSample(dataset, numInstances);
             
             // 2. Select random feature subset (always include HbA1c)
             Set<Integer> featureSubset = selectFeatureSubset(numFeatures);
@@ -36,9 +36,9 @@ public class RandomForestAlgorithm{
             trees[i] = new DecisionTree(bootstrapSample, featureSubset);
         }
     }
-    
-    private List<String> createBootstrapSample(List<String> dataset, int size) { // create a bootstrap sample for building a tree
-        List<String> sample = new ArrayList<>();
+
+    private List<List<Float>> createBootstrapSample(List<List<Float>> dataset, int size) { // create a bootstrap sample for building a tree
+        List<List<Float>> sample = new ArrayList<>();
         for (int i = 0; i < size; i++) {
             sample.add(dataset.get(random.nextInt(size)));
         }
