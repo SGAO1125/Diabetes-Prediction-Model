@@ -1,5 +1,8 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class Preprocessor{
     private CustomerData customerData;
@@ -8,7 +11,7 @@ public class Preprocessor{
     Float Max_Blood_Glucose_Level;
     Float Max_Age;
     
-    public List<Float> preprocess(CustomerData data){
+    public List<Float> preprocessCustomerData(CustomerData data){
         List<Float> processed = new ArrayList<>();
 
         processed.add(normalize((float)customerData.getAge(), Max_Age));
@@ -23,7 +26,44 @@ public class Preprocessor{
 
         return processed;
     }
-    public float normalize(float maxValue, Float value){
+    public List<List<Float>> preprocessDataset(List<String> dataset){
+        List<List<Float>> splitData = dataset.stream()
+        .map(line -> {
+            String[] parts = line.split(",");
+            List<Float> processed = new ArrayList<>();
+
+            for (int i = 0; i < parts.length; i++) {
+                String val = parts[i].trim().toLowerCase();
+
+                // Boolean conversion
+                if (val.equals("true") || val.equals("yes")) {
+                    processed.add(1.0f);
+                } else if (val.equals("false") || val.equals("no")) {
+                    processed.add(0.0f);
+                } else {
+                    float num = Float.parseFloat(val);
+                    switch (i) {
+                        case 0:
+                            processed.add(normalize(Max_Age, num)); break;
+                        case 1:
+                            processed.add(normalize(Max_BMI, num)); break;
+                        case 2:
+                            processed.add(normalize(Max_HbA1C, num)); break;
+                        case 3:
+                            processed.add(normalize(Max_Blood_Glucose_Level, num)); break;
+                        default:
+                            processed.add(0.0f); // If index doesn't match known feature
+                    }
+                }
+            }
+
+            return processed;
+        })
+        .collect(Collectors.toList());
+        return splitData;
+        
+    }
+    public Float normalize(float maxValue, Float value){
         if(value <= 0 || value == null){
             return 0f;
         }
