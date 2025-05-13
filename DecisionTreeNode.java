@@ -1,54 +1,45 @@
-import java.util.Map;
+import java.util.*;
+import java.util.Random;
 
-public class DecisionTreeNode {
-    // For splitting node:
-    private Integer featureIndex; // Feature index to split on (null for leaf nodes)
-    private Map<String, DecisionTreeNode> children; // Children for each possible value of the feature
+// 1. DecisionTreeNode.java
+class DecisionTreeNode {
+    int IndexofFeature; // e.g., 4 for "HbA1c"
+    private double splitCondition; // e.g., "HbA1c <= 6.5"
+    private DecisionTreeNode leftChild;
+    private DecisionTreeNode rightChild;
+    private Integer prediction; // Only for leaf nodes
     
-    // For leaf node:
-    private String label; // The label for classification (only for leaf nodes)
-
-    // Constructor for a leaf node
-    public DecisionTreeNode(String label) {
-        this.label = label;
-        this.featureIndex = null; // Leaf node has no feature to split
-        this.children = null;
+    public DecisionTreeNode() { // Default constructor
+        this.splitCondition = 0.0;
+        this.leftChild = null;
+        this.rightChild = null;
+        this.prediction = null;
     }
 
-    // Constructor for a splitting node
-    public DecisionTreeNode(Integer featureIndex, Map<String, DecisionTreeNode> children) {
-        this.featureIndex = featureIndex;
-        this.children = children;
-        this.label = null; // Splitting node does not have a label
+    public DecisionTreeNode(int index, double splitCondition ,DecisionTreeNode leftChild, DecisionTreeNode rightChild) {
+        this.IndexofFeature = index;
+        this.splitCondition = splitCondition;
+        this.leftChild = leftChild;
+        this.rightChild = rightChild;
+        this.prediction = null;
     }
-
-    // Check if the node is a leaf node
+    
+    // Constructor for leaf nodes
+    public DecisionTreeNode(Integer prediction) {
+        this.IndexofFeature = -1; // No feature index for leaf nodes
+        this.prediction = prediction;
+        this.splitCondition = null;
+        this.leftChild = null;
+        this.rightChild = null;
+    }
+    
     public boolean isLeaf() {
-        return label != null;
+        return prediction != null;
     }
-
-    // Getters and Setters
-    public Integer getFeatureIndex() {
-        return featureIndex;
-    }
-
-    public void setFeatureIndex(Integer featureIndex) {
-        this.featureIndex = featureIndex;
-    }
-
-    public Map<String, DecisionTreeNode> getChildren() {
-        return children;
-    }
-
-    public void setChildren(Map<String, DecisionTreeNode> children) {
-        this.children = children;
-    }
-
-    public String getLabel() {
-        return label;
-    }
-
-    public void setLabel(String label) {
-        this.label = label;
-    }
+    
+    // Getters
+    public String getSplitCondition() { return splitCondition; }
+    public DecisionTreeNode getLeftChild() { return leftChild; }
+    public DecisionTreeNode getRightChild() { return rightChild; }
+    public Integer getPrediction() { return prediction; }
 }
