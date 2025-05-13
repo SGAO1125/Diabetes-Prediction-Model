@@ -6,10 +6,12 @@ import java.util.stream.IntStream;
 
 public class Preprocessor{
     private CustomerData customerData;
+
     private Float Max_BMI = 300;
     private Float Max_HbA1C = 9;
     private Float Max_Blood_Glucose_Level = 300;
     private Float Max_Age = 112;
+
     
     public List<Float> preprocessCustomerData(CustomerData data){
         List<Float> processed = new ArrayList<>();
@@ -36,34 +38,35 @@ public class Preprocessor{
                 String val = parts[i].trim().toLowerCase();
 
                 // Boolean conversion
-                if(val.equals("female")){ 
-                    processed.add(0.0f)
-                }
-                else if(val.equals("male")){
-                    processed.add(1.0f)
-                }
-                else if (val.equals("true") || val.equals("yes")) {
-                    processed.add(1.0f);
-                } 
-                else if (val.equals("false") || val.equals("no")) {
-                    processed.add(0.0f);
-                } 
-                else {
-                    float num = Float.parseFloat(val);
-                    switch (i) {
-                        case 0:
-                            processed.add(normalize(Max_Age, num)); break;
-                        case 1:
-                            processed.add(normalize(Max_BMI, num)); break;
-                        case 2:
-                            processed.add(normalize(Max_HbA1C, num)); break;
-                        case 3:
-                            processed.add(normalize(Max_Blood_Glucose_Level, num)); break;
-                        default:
-                            processed.add(0.0f); // If index doesn't match known feature
-                    }
-                }
-            }
+
+              if(val.equals("female")){ 
+                   processed.add(0.0f)
+              }
+              else if(val.equals("male")){
+                   processed.add(1.0f)
+              }
+              else if (val.equals("true") || val.equals("yes")) {
+                   processed.add(1.0f);
+              } 
+              else if (val.equals("false") || val.equals("no")) {
+                   processed.add(0.0f);
+              } 
+              else {
+                   float num = Float.parseFloat(val);
+                   switch (i) {
+                       case 0:
+                           processed.add(normalize(Max_Age, num)); break;
+                       case 1:
+                           processed.add(normalize(Max_BMI, num)); break;
+                       case 2:
+                           processed.add(normalize(Max_HbA1C, num)); break;
+                       case 3:
+                           processed.add(normalize(Max_Blood_Glucose_Level, num)); break;
+                       default:
+                           processed.add(0.0f); // If index doesn't match known feature
+                   }
+               }
+           }
 
             return processed;
         })
