@@ -1,8 +1,8 @@
-
+package Classifiers;
 import java.util.ArrayList;
 import java.util.List;
 
-public void class CustomizeModel{
+public class CustomizeModel{
     private List<String> customizedDataset;
 
     public CustomizeModel(List<String> dataset, Float Hb1Ac) {

@@ -1,3 +1,4 @@
+package Classifiers;
 import java.util.*;
 
 public class RandomForestAlgorithm{

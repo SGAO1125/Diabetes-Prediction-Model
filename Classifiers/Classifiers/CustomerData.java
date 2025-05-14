@@ -1,3 +1,4 @@
+package Classifiers;
 public class CustomerData {
 
     private static Float BMI;

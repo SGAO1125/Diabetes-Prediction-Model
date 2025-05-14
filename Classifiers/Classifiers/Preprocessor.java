@@ -1,3 +1,4 @@
+package Classifiers;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -7,10 +8,10 @@ import java.util.stream.IntStream;
 public class Preprocessor{
     private CustomerData customerData;
 
-    private Float Max_BMI = 300;
-    private Float Max_HbA1C = 9;
-    private Float Max_Blood_Glucose_Level = 300;
-    private Float Max_Age = 112;
+    private Float Max_BMI = 300f;
+    private Float Max_HbA1C = 9f;
+    private Float Max_Blood_Glucose_Level = 300f;
+    private Float Max_Age = 112f;
 
     
     public List<Float> preprocessCustomerData(CustomerData data){
@@ -28,6 +29,7 @@ public class Preprocessor{
 
         return processed;
     }
+
     public List<List<Float>> preprocessDataset(List<String> dataset){
         List<List<Float>> splitData = dataset.stream()
         .map(line -> {
@@ -40,10 +42,10 @@ public class Preprocessor{
                 // Boolean conversion
 
               if(val.equals("female")){ 
-                   processed.add(0.0f)
+                   processed.add(0.0f);
               }
               else if(val.equals("male")){
-                   processed.add(1.0f)
+                   processed.add(1.0f);
               }
               else if (val.equals("true") || val.equals("yes")) {
                    processed.add(1.0f);
@@ -69,7 +71,7 @@ public class Preprocessor{
            }
 
             return processed;
-        })
+        } )
         .collect(Collectors.toList());
         return splitData;
         

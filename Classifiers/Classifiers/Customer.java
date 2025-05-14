@@ -1,3 +1,4 @@
+package Classifiers;
 import java.util.UUID;
 public class Customer{
     private String UserID;
