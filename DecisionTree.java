@@ -1,4 +1,3 @@
-package Classifiers;
 import java.util.*;
 
 public class DecisionTree {

@@ -7,29 +7,95 @@ public class Recommendation {
 
     public Recommendation() {
         this.date = getCurrentDate();
-        this.foodTree = new HashMap<>();
+        this.foodTree = initializeFoodTree();
     }
 
-    public void generateMonthlyFood() {
-
+    private int getCurrentDate() {
+        return Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
     }
 
-    public void generateDailyMeal() {
+    private Map<String, List<String>> initializeFoodTree() {
+        Map<String, List<String>> tree = new HashMap<>();
 
+        tree.put("High_BMI", Arrays.asList("Grilled chicken", "Steamed vegetables", "Quinoa", "Avocados"));
+        tree.put("High_Glucose", Arrays.asList("Oats", "Lentils", "Whole grains", "Leafy greens"));
+        tree.put("High_HbA1C", Arrays.asList("Brown rice", "Sweet potatoes", "Nuts", "Beans"));
+        tree.put("Heart_Disease", Arrays.asList("Salmon", "Olive oil", "Berries", "Spinach"));
+        tree.put("Hypertension", Arrays.asList("Bananas", "Beets", "Low-fat yogurt", "Garlic"));
+
+        return tree;
     }
 
-    public String getPersonalizedMealPlan(String[] dataset) {
+    public String getPersonalizedMealPlan(CustomerData customer) {
+        List<String> recommended = new ArrayList<>();
 
-        return "Recommended Meal Plan based on user data.";
+        if (customer.getBMI() > 25.0f) {
+            recommended.addAll(foodTree.get("High_BMI"));
+        }
+        if (customer.getBlood_Glucose_Level() > 140.0f) {
+            recommended.addAll(foodTree.get("High_Glucose"));
+        }
+        if (customer.getHb1AC() > 6.0f) {
+            recommended.addAll(foodTree.get("High_HbA1C"));
+        }
+        if (customer.getHeart_Disease()) {
+            recommended.addAll(foodTree.get("Heart_Disease"));
+        }
+        if (customer.getHyperTension()) {
+            recommended.addAll(foodTree.get("Hypertension"));
+        }
+
+        if (recommended.isEmpty()) {
+            return "Your values are in a healthy range! Stick to a balanced diet: lean protein, fruits, vegetables, and whole grains.";
+        }
+
+        Set<String> uniqueFoods = new LinkedHashSet<>(recommended); // Remove duplicates, keep order
+        return "Personalized Food Recommendations:\n- " + String.join("\n- ", uniqueFoods);
     }
 
     public String logMealHistory(int customerID, String[] meal) {
-
-        return "Meal logged for customer ID: " + customerID;
+        return "Meal logged for customer ID: " + customerID + " → " + Arrays.toString(meal);
     }
 
     public String compareNutritionGoals(String[] dataset) {
+        return "Nutrition comparison complete. Results: [Mock comparison based on dataset]";
+    }
 
-        return "Nutrition comparison complete. Results: [Sample Result]";
+    public void generateMonthlyFood() {
+        // Placeholder for monthly planning logic
+    }
+
+    public void generateDailyMeal() {
+        // Placeholder for daily meal generation logic
+    }
+
+    public void generateHealthyDatasetAverage(List<CustomerData> healthyCustomers) {
+        if (healthyCustomers.isEmpty()) {
+            System.out.println("No healthy datasets provided.");
+            return;
+        }
+
+        double totalBMI = 0;
+        double totalGlucose = 0;
+        double totalHbA1C = 0;
+        int totalHeartDisease = 0;
+        int totalHypertension = 0;
+
+        int count = healthyCustomers.size();
+
+        for (CustomerData customer : healthyCustomers) {
+            totalBMI += customer.getBMI();
+            totalGlucose += customer.getBlood_Glucose_Level();
+            totalHbA1C += customer.getHb1AC();
+            totalHeartDisease += customer.getHeart_Disease() ? 1 : 0;
+            totalHypertension += customer.getHyperTension() ? 1 : 0;
+        }
+
+        System.out.println("\n--- Average Values from Healthy Dataset ---");
+        System.out.printf("Average BMI: %.2f\n", totalBMI / count);
+        System.out.printf("Average Blood Glucose Level: %.2f\n", totalGlucose / count);
+        System.out.printf("Average HbA1C: %.2f\n", totalHbA1C / count);
+        System.out.printf("Heart Disease Presence (0-1): %.2f\n", (double) totalHeartDisease / count);
+        System.out.printf("Hypertension Presence (0-1): %.2f\n", (double) totalHypertension / count);
     }
 }

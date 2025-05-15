@@ -1,4 +1,3 @@
-package Classifiers;
 public class DecisionTreeNode {
     private String splitCondition;         // E.g., "4 <= 6.5"
     private DecisionTreeNode left;

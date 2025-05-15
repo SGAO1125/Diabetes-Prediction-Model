@@ -1,10 +1,9 @@
-package Classifiers;
 import java.util.*;
 
 public class RandomForestAlgorithm{
     private DecisionTree[] trees;
     private int numTrees;
-    private Random random;
+    private Random random;  
     
     // Feature index number in the string array dataset
     private static final int SEX = 0; //0 or 1
