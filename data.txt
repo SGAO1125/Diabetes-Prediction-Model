@@ -58,7 +58,6 @@ List<String> data = Arrays.asList(
     "Male,30.0,27.32,140,6.6,0,0,0",
     "Female,19.0,23.35,155,3.5,0,0,0",
     "Male,46.0,24.41,140,5.0,0,0,0"
-    // The list continues...
 );
 
 List<String> dataPart2 = Arrays.asList(
