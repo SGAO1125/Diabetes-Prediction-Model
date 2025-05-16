@@ -3,12 +3,13 @@ import java.awt.*;
 import java.io.*;
 import java.util.*;
 
-
 public class CustomerData {
 
+    // Store customers with a unique ID
     private final HashMap<String, Customer> customerMap = new HashMap<>();
-    private final String FILE_NAME = "User.txt";
+    private final String FILE_NAME = "User.txt"; // File used for saving customer data
 
+    // Health data of current customer
     private float BMI;
     private float Hb1AC;
     private float Blood_Glucose_Level;
@@ -22,6 +23,7 @@ public class CustomerData {
         loadCustomersFromFile();
     }
 
+    // Getter methods
     public float getBMI() { return BMI; }
     public float getHb1AC() { return Hb1AC; }
     public float getBlood_Glucose_Level() { return Blood_Glucose_Level; }
@@ -30,6 +32,7 @@ public class CustomerData {
     public boolean getSex() { return Sex; }
     public boolean getHyperTension() { return Hypertension; }
 
+    // GUI setup
     public void launchGUI() {
         JFrame frame = new JFrame("Customer Data Input");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -40,6 +43,7 @@ public class CustomerData {
         JPanel buttonPanel = new JPanel(new FlowLayout());
         JPanel displayPanel = new JPanel(new BorderLayout());
 
+        // Input fields
         JTextField nameField = new JTextField();
 
         String[] sexOptions = {"0 - Female", "1 - Male"};
@@ -56,10 +60,12 @@ public class CustomerData {
         String[] hypertensionOptions = {"0 - No", "1 - Yes"};
         JComboBox<String> hypertensionBox = new JComboBox<>(hypertensionOptions);
 
+        // Display
         JTextArea displayArea = new JTextArea(12, 40);
         displayArea.setEditable(false);
         displayArea.setFont(new Font("Monospaced", Font.PLAIN, 12));
 
+        // Buttons
         JButton submitButton = new JButton("Submit & Save");
         JButton showAllButton = new JButton("Show All Customers");
 
@@ -88,6 +94,7 @@ public class CustomerData {
         frame.add(buttonPanel, BorderLayout.CENTER);
         frame.add(displayPanel, BorderLayout.SOUTH);
 
+        // Submit button
         submitButton.addActionListener(e -> {
             try {
                 String name = nameField.getText().trim();
@@ -96,6 +103,7 @@ public class CustomerData {
                     return;
                 }
 
+                // Validate user input
                 int sex = sexBox.getSelectedIndex();
                 int age = Integer.parseInt(ageField.getText());
                 float bmi = Float.parseFloat(bmiField.getText());
@@ -103,13 +111,15 @@ public class CustomerData {
                 float hb1ac = Float.parseFloat(hb1acField.getText());
                 int heartDisease = heartDiseaseBox.getSelectedIndex();
                 int hypertension = hypertensionBox.getSelectedIndex();
-                int isdiabetic = -1;
+                int isdiabetic = -1;    // Default as unknown
 
+                // No out of bounds input
                 if (age < 1 || age > 112) throw new NumberFormatException("Age must be between 1 and 112.");
                 if (bmi < 1 || bmi > 50) throw new NumberFormatException("BMI must be between 1 and 50.");
                 if (glucose < 1 || glucose > 300) throw new NumberFormatException("Glucose must be between 1 and 300.");
                 if (hb1ac < 3.5 || hb1ac > 9) throw new NumberFormatException("HbA1C must be between 3.5 and 9.");
 
+                // Check for existing name
                 boolean nameExists = customerMap.values().stream()
                         .anyMatch(c -> c.getName().equalsIgnoreCase(name));
 
@@ -124,9 +134,11 @@ public class CustomerData {
                         return;
                     }
 
+                    // Remove previous entry with same name
                     customerMap.entrySet().removeIf(entry -> entry.getValue().getName().equalsIgnoreCase(name));
                 }
 
+                // Save values to field
                 Sex = (sex == 1);
                 Age = age;
                 BMI = bmi;
@@ -135,6 +147,7 @@ public class CustomerData {
                 Heart_Disease = (heartDisease == 1);
                 Hypertension = (hypertension == 1);
 
+                // Customer data array
                 String[] data = {
                         String.valueOf(sex),
                         String.valueOf(age),
@@ -146,12 +159,13 @@ public class CustomerData {
                         String.valueOf(isdiabetic)
                 };
 
+                // Create and store new customer
                 Customer customer = new Customer(name, data);
                 customerMap.put(customer.getUserID(), customer);
                 saveCustomersToFile();
 
                 displayArea.setText("Customer saved!\nID: " + customer.getUserID());
-
+                // Print to terminal
                 Display();
 
             } catch (NumberFormatException ex) {
@@ -159,6 +173,7 @@ public class CustomerData {
             }
         });
 
+        // Show all stored customers
         showAllButton.addActionListener(e -> {
             if (customerMap.isEmpty()) {
                 displayArea.setText("No customers stored.");
@@ -176,6 +191,7 @@ public class CustomerData {
         frame.setVisible(true);
     }
 
+    // Load data from User.txt into customerMap
     private void loadCustomersFromFile() {
         File file = new File(FILE_NAME);
         if (!file.exists()) return;
@@ -205,6 +221,7 @@ public class CustomerData {
         }
     }
 
+    // Save current customers to file
     private void saveCustomersToFile() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_NAME))) {
             for (Customer customer : customerMap.values()) {
@@ -221,6 +238,7 @@ public class CustomerData {
         }
     }
 
+    // Print the current customers data to terminal
     public void Display() {
     System.out.println("\n--- Customer Data ---");
     System.out.println("Sex: " + (Sex ? "Male" : "Female"));
@@ -230,5 +248,5 @@ public class CustomerData {
     System.out.println("Hb1AC: " + Hb1AC);
     System.out.println("Heart Disease: " + (Heart_Disease ? "Yes" : "No"));
     System.out.println("Hypertension: " + (Hypertension ? "Yes" : "No"));
-}
+    }
 }
