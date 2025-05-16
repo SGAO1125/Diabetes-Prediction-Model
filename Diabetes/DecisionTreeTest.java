@@ -12,11 +12,13 @@ public class DecisionTreeTest {
                 new ArrayList<>(List.of(1.1f, 2.1f, 3.1f, 4.1f, 5.7f, 0.0f)),
                 new ArrayList<>(List.of(0.9f, 1.9f, 2.9f, 3.9f, 5.3f, 0.0f))
         ));
+        // Feature indices to create
         Set<Integer> featureIndices = new HashSet<>(Set.of(0, 1, 2, 3, 4));
         DecisionTree tree = new DecisionTree(data, featureIndices);
         int prediction = tree.predict(List.of(1.0f, 2.0f, 3.0f, 4.0f, 5.6f));
         assertEquals(0, prediction);
     }
+
     @Test
     public void testSplitOnHbA1c() {
         List<List<Float>> data = new ArrayList<>(List.of(
