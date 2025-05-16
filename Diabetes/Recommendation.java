@@ -29,19 +29,19 @@ public class Recommendation { //give user personalized meal plan
     public String getPersonalizedMealPlan(CustomerData customer) {//by looking at the customer data, we can give them a personalized meal plan
         List<String> recommended = new ArrayList<>();
 
-        if (customer.getBMI() > 25.0f) {
+        if (customer.getBMI() > 25.0f) { // If customer BMI is greater than 25
             recommended.addAll(foodTree.get("High_BMI"));
         }
-        if (customer.getBlood_Glucose_Level() > 140.0f) {
+        if (customer.getBlood_Glucose_Level() > 140.0f) { //If Customer Blood_Glucose_Level is greater than 140
             recommended.addAll(foodTree.get("High_Glucose"));
         }
-        if (customer.getHb1AC() > 6.0f) {
+        if (customer.getHb1AC() > 6.0f) { //If Customer Hb1Ac is greater than 6.0
             recommended.addAll(foodTree.get("High_HbA1C"));
         }
-        if (customer.getHeart_Disease()) {
+        if (customer.getHeart_Disease()) { //If Customer has Heart_Disease
             recommended.addAll(foodTree.get("Heart_Disease"));
         }
-        if (customer.getHyperTension()) {
+        if (customer.getHyperTension()) {//If Customer has HyperTension
             recommended.addAll(foodTree.get("Hypertension"));
         }
 
