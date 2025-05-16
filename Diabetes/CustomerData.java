@@ -5,7 +5,7 @@ import java.util.*;
 
 public class CustomerData {
 
-    // Store customers with a unique ID
+    // Store customers with a unique IDs
     private final HashMap<String, Customer> customerMap = new HashMap<>();
     private final String FILE_NAME = "User.txt"; // File used for saving customer data
 
@@ -32,7 +32,7 @@ public class CustomerData {
     public boolean getSex() { return Sex; }
     public boolean getHyperTension() { return Hypertension; }
 
-    // GUI setup
+    // Launches GUI for user input
     public void launchGUI() {
         JFrame frame = new JFrame("Customer Data Input");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -60,15 +60,16 @@ public class CustomerData {
         String[] hypertensionOptions = {"0 - No", "1 - Yes"};
         JComboBox<String> hypertensionBox = new JComboBox<>(hypertensionOptions);
 
-        // Display
+        // Display area for data output
         JTextArea displayArea = new JTextArea(12, 40);
         displayArea.setEditable(false);
         displayArea.setFont(new Font("Monospaced", Font.PLAIN, 12));
 
-        // Buttons
+        // Buttons for submit and show all customers
         JButton submitButton = new JButton("Submit & Save");
         JButton showAllButton = new JButton("Show All Customers");
 
+        // Add labels and input fields to input panel
         inputPanel.add(new JLabel("Name:"));
         inputPanel.add(nameField);
         inputPanel.add(new JLabel("Sex (0 = Female, 1 = Male):"));
@@ -85,25 +86,28 @@ public class CustomerData {
         inputPanel.add(heartDiseaseBox);
         inputPanel.add(new JLabel("Hypertension (0 = No, 1 = Yes):"));
         inputPanel.add(hypertensionBox);
-
+        
+        // Buttons to button panel
         buttonPanel.add(submitButton);
         buttonPanel.add(showAllButton);
+        // Scrollable display area 
         displayPanel.add(new JScrollPane(displayArea), BorderLayout.CENTER);
-
+        // Add all panels to main frame
         frame.add(inputPanel, BorderLayout.NORTH);
         frame.add(buttonPanel, BorderLayout.CENTER);
         frame.add(displayPanel, BorderLayout.SOUTH);
 
-        // Submit button
+        // Handler for "Submit & Save" button
         submitButton.addActionListener(e -> {
             try {
+                // Validate user name
                 String name = nameField.getText().trim();
                 if (name.isEmpty()) {
                     displayArea.setText("Error: Name is required.");
                     return;
                 }
 
-                // Validate user input
+                // Validate user input values
                 int sex = sexBox.getSelectedIndex();
                 int age = Integer.parseInt(ageField.getText());
                 float bmi = Float.parseFloat(bmiField.getText());
@@ -124,6 +128,7 @@ public class CustomerData {
                         .anyMatch(c -> c.getName().equalsIgnoreCase(name));
 
                 if (nameExists) {
+                    // If the name exists ask user if they want to overwrite
                     int option = JOptionPane.showConfirmDialog(frame,
                             "Customer with this name already exists.\nDo you want to overwrite the existing data?",
                             "Duplicate Name Found",
@@ -138,7 +143,7 @@ public class CustomerData {
                     customerMap.entrySet().removeIf(entry -> entry.getValue().getName().equalsIgnoreCase(name));
                 }
 
-                // Save values to field
+                // Store values to field
                 Sex = (sex == 1);
                 Age = age;
                 BMI = bmi;
@@ -147,7 +152,7 @@ public class CustomerData {
                 Heart_Disease = (heartDisease == 1);
                 Hypertension = (hypertension == 1);
 
-                // Customer data array
+                // Customer string data array
                 String[] data = {
                         String.valueOf(sex),
                         String.valueOf(age),
@@ -159,11 +164,11 @@ public class CustomerData {
                         String.valueOf(isdiabetic)
                 };
 
-                // Create and store new customer
+                // Create and store new customer in map
                 Customer customer = new Customer(name, data);
                 customerMap.put(customer.getUserID(), customer);
                 saveCustomersToFile();
-
+                // Show confirmation that customer was saved successfully
                 displayArea.setText("Customer saved!\nID: " + customer.getUserID());
                 // Print to terminal
                 Display();
@@ -173,7 +178,7 @@ public class CustomerData {
             }
         });
 
-        // Show all stored customers
+        // Handler for "Show All Customers"
         showAllButton.addActionListener(e -> {
             if (customerMap.isEmpty()) {
                 displayArea.setText("No customers stored.");
@@ -221,7 +226,7 @@ public class CustomerData {
         }
     }
 
-    // Save current customers to file
+    // Save current customers to User.txt file
     private void saveCustomersToFile() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_NAME))) {
             for (Customer customer : customerMap.values()) {
