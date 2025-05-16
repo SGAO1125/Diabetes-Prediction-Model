@@ -8,8 +8,8 @@ public class DecisionTree {
     public DecisionTree(List<List<Float>> data, Set<Integer> featureIndices) {
         this.targetIndex = data.get(0).size() - 1;
         Set<Integer> remainingFeatures = new HashSet<>(featureIndices);
-        remainingFeatures.remove(HBA1C_index);
-        this.root = buildTreeWithHbA1cRoot(data, remainingFeatures);
+        remainingFeatures.remove(HBA1C_index); // Makes sure that hBA1C is not reused later when building tree
+        this.root = buildTreeWithHbA1cRoot(data, remainingFeatures); //Builds Tree using the target attribute HbA1c
     }
 
     private DecisionTreeNode buildTreeWithHbA1cRoot(List<List<Float>> data, Set<Integer> features) {
@@ -102,8 +102,10 @@ public class DecisionTree {
         return new SplitResult(bestFeature, bestThreshold, bestLeft, bestRight, bestGini);
     }
 
+    // The lower the gini value is the better the feature is for splitting
     private SplitResult findBestSplitOnFeature(List<List<Float>> data, int feature) {
         data.sort(Comparator.comparingDouble(row -> row.get(feature)));
+        // Goal here is to find the best split using the Gini value
         double bestGini = Double.MAX_VALUE;
         double bestThreshold = 0;
         List<List<Float>> bestLeft = null, bestRight = null;
@@ -111,16 +113,19 @@ public class DecisionTree {
         for (int i = 1; i < data.size(); i++) {
             double prev = data.get(i - 1).get(feature);
             double curr = data.get(i).get(feature);
+            // Calculates threshold 
             if (prev != curr) {
-                double threshold = (prev + curr) / 2.0;
+                double threshold = (prev + curr) / 2.0; // Take average of both curr and previous feature
                 List<List<Float>> left = new ArrayList<>();
                 List<List<Float>> right = new ArrayList<>();
 
+                // Store values that are less than the threshold in the left arraylist and others in the right arraylist
                 for (List<Float> row : data) {
                     if (row.get(feature) <= threshold) left.add(row);
                     else right.add(row);
                 }
 
+                // Calculating highest gini and storing it in maximum
                 double gini = giniImpurity(left, right);
                 if (gini < bestGini) {
                     bestGini = gini;
@@ -135,12 +140,14 @@ public class DecisionTree {
 
         return new SplitResult(feature, bestThreshold, bestLeft, bestRight, bestGini);
     }
-
+    
+    // Calculates gini and stores it in Gini
     private double giniImpurity(List<List<Float>> left, List<List<Float>> right) {
         int total = left.size() + right.size();
         return (left.size() / (double) total) * gini(left) + (right.size() / (double) total) * gini(right);
     }
 
+    //Gini formula
     private double gini(List<List<Float>> data) {
         int[] counts = new int[2];
         for (List<Float> row : data) {
@@ -150,7 +157,7 @@ public class DecisionTree {
         double p1 = counts[1] / (double) data.size();
         return 1 - (p0 * p0 + p1 * p1);
     }
-
+    
     private static class SplitResult {
         int featureIndex;
         double threshold;
