@@ -1,6 +1,6 @@
 import java.util.*;
 
-public class Recommendation {
+public class Recommendation { //give user personalized meal plan
 
     private int date;
     private Map<String, List<String>> foodTree;
@@ -10,11 +10,11 @@ public class Recommendation {
         this.foodTree = initializeFoodTree();
     }
 
-    private int getCurrentDate() {
+    private int getCurrentDate() { // Get the current date
         return Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
     }
 
-    private Map<String, List<String>> initializeFoodTree() {
+    private Map<String, List<String>> initializeFoodTree() {// Initialize the food tree with recommended foods based on health conditions
         Map<String, List<String>> tree = new HashMap<>();
 
         tree.put("High_BMI", Arrays.asList("Grilled chicken", "Steamed vegetables", "Quinoa", "Avocados"));
@@ -26,7 +26,7 @@ public class Recommendation {
         return tree;
     }
 
-    public String getPersonalizedMealPlan(CustomerData customer) {
+    public String getPersonalizedMealPlan(CustomerData customer) {//by looking at the customer data, we can give them a personalized meal plan
         List<String> recommended = new ArrayList<>();
 
         if (customer.getBMI() > 25.0f) {
@@ -53,7 +53,7 @@ public class Recommendation {
         return "Personalized Food Recommendations:\n- " + String.join("\n- ", uniqueFoods);
     }
 
-    public String logMealHistory(int customerID, String[] meal) {
+    public String logMealHistory(int customerID, String[] meal) { // Log the meal history for a customer
         return "Meal logged for customer ID: " + customerID + " → " + Arrays.toString(meal);
     }
 
@@ -69,7 +69,7 @@ public class Recommendation {
         // Placeholder for daily meal generation logic
     }
 
-    public void generateHealthyDatasetAverage(List<CustomerData> healthyCustomers) {
+    public void generateHealthyDatasetAverage(List<CustomerData> healthyCustomers) { // Calculate and print average values from the healthy dataset
         if (healthyCustomers.isEmpty()) {
             System.out.println("No healthy datasets provided.");
             return;
