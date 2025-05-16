@@ -1,33 +1,38 @@
-package Classifiers;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 public class Preprocessor{
     private CustomerData customerData;
 
-    private Float Max_BMI = 300f;
-    private Float Max_HbA1C = 9f;
-    private Float Max_Blood_Glucose_Level = 300f;
-    private Float Max_Age = 112f;
+    private String sex;
+    private Float Max_BMI;
+    private Float Max_HbA1C;
+    private Float Max_Blood_Glucose_Level;
+    private Float Max_Age;
 
-    
-    public List<Float> preprocessCustomerData(CustomerData data){
-        List<Float> processed = new ArrayList<>();
+    public Preprocessor() {
+        this.sex = "undefined";
+        this.Max_Age = 112f;
+        this.Max_BMI = 300f;
+        this.Max_HbA1C = 9f;
+        this.Max_Blood_Glucose_Level = 300f;
+    }
+    public Preprocessor(Float Max_BMI, Float Max_HbA1C, Float Max_Blood_Glucose_Level, Float Max_Age ) {
+        this.sex = "undefined";
+        this.Max_BMI = Max_BMI;
+        this.Max_HbA1C = Max_HbA1C;
+        this.Max_Blood_Glucose_Level = Max_Blood_Glucose_Level;
+        this.Max_Age = Max_Age;
 
-        processed.add(normalize((float)customerData.getAge(), Max_Age));
-        processed.add(normalize(customerData.getBMI(), Max_BMI));
-        processed.add(normalize(data.getHb1AC(), Max_HbA1C));
-        processed.add(normalize(data.getBlood_Glucose_Level(), Max_Blood_Glucose_Level));
+    }
+    public Preprocessor(String sex, Float Max_BMI, Float Max_HbA1C, Float Max_Blood_Glucose_Level, Float Max_Age ) {
+        this.sex = sex;
+        this.Max_BMI = Max_BMI;
+        this.Max_HbA1C = Max_HbA1C;
+        this.Max_Blood_Glucose_Level = Max_Blood_Glucose_Level;
+        this.Max_Age = Max_Age;
 
-        // Add booleans as 0.0 or 1.0
-        processed.add(data.getHeart_Disease() ? 1.0f : 0.0f);
-        processed.add(data.getSex() ? 1.0f : 0.0f);
-        processed.add(data.getHyperTension() ? 1.0f : 0.0f);
-
-        return processed;
     }
 
     public List<List<Float>> preprocessDataset(List<String> dataset){
@@ -35,6 +40,7 @@ public class Preprocessor{
         .map(line -> {
             String[] parts = line.split(",");
             List<Float> processed = new ArrayList<>();
+            int offset = 1;
 
             for (int i = 0; i < parts.length; i++) {
                 String val = parts[i].trim().toLowerCase();
@@ -43,9 +49,14 @@ public class Preprocessor{
 
               if(val.equals("female")){ 
                    processed.add(0.0f);
+                   offset = 0;
               }
               else if(val.equals("male")){
                    processed.add(1.0f);
+                   offset = 0;
+              }
+              else if(val.equals("undefined")){
+                  processed.add(-1.0f);
               }
               else if (val.equals("true") || val.equals("yes")) {
                    processed.add(1.0f);
@@ -55,17 +66,17 @@ public class Preprocessor{
               } 
               else {
                    float num = Float.parseFloat(val);
-                   switch (i) {
+                   switch (i - offset) {
                        case 0:
                            processed.add(normalize(Max_Age, num)); break;
                        case 1:
                            processed.add(normalize(Max_BMI, num)); break;
                        case 2:
-                           processed.add(normalize(Max_HbA1C, num)); break;
-                       case 3:
                            processed.add(normalize(Max_Blood_Glucose_Level, num)); break;
+                       case 3:
+                           processed.add(normalize(Max_HbA1C, num)); break;
                        default:
-                           processed.add(0.0f); // If index doesn't match known feature
+                           processed.add(num); // If index doesn't match known feature
                    }
                }
            }
