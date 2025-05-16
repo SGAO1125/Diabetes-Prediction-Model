@@ -20,23 +20,23 @@ public class DecisionTreeNode {
         this.right = null;
     }
 
-    public boolean isLeaf() {
+    public boolean isLeaf() {//Check if the node is a leaf/endpoint
         return prediction != null;
     }
 
-    public int getPrediction() {
+    public int getPrediction() {//Get the prediction value
         return prediction;
     }
 
-    public String getSplitCondition() {
+    public String getSplitCondition() { //Get the split condition
         return splitCondition;
     }
 
-    public DecisionTreeNode getLeftChild() {
+    public DecisionTreeNode getLeftChild() { //Get the left Child
         return left;
     }
 
-    public DecisionTreeNode getRightChild() {
+    public DecisionTreeNode getRightChild() { //Get the right child
         return right;
     }
 }
